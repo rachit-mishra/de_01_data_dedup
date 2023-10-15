@@ -1,0 +1,3 @@
+com/substack/dataengineering/JsonPOJOSerde.class
+com/substack/dataengineering/JsonPOJOSerializer.class
+com/substack/dataengineering/DeduplicationProcessor.class
