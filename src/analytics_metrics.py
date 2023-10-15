@@ -14,17 +14,22 @@ while True:
     batch_count += 1
 
     # Raw data metrics
-    start_raw = time.time()
+    
     cur.execute("SELECT COUNT(*), COUNT(DISTINCT(sensor_id, timestamp)) FROM raw_weather")
     raw_count, raw_unique_count = cur.fetchone()
     duplicates_raw = raw_count - raw_unique_count
+
+    start_raw = time.time()
+    cur.execute("SELECT sensor_id, AVG(temperature) as avg_temperature, AVG(humidity) as avg_humidity FROM raw_weather GROUP BY sensor_id")
     end_raw = time.time()
     raw_time = round((end_raw - start_raw) * 1000, 2)  # Convert time to milliseconds
 
     # Deduplicated data metrics
-    start_dedup = time.time()
     cur.execute("SELECT COUNT(*) FROM dedup_weather")
     dedup_count = cur.fetchone()[0]
+    
+    start_dedup = time.time()
+    cur.execute("SELECT sensor_id, AVG(temperature) as avg_temperature, AVG(humidity) as avg_humidity FROM dedup_weather GROUP BY sensor_id")
     end_dedup = time.time()
     dedup_time = round((end_dedup - start_dedup) * 1000, 2)  # Convert time to milliseconds
 

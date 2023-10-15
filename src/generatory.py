@@ -9,8 +9,8 @@ producer = KafkaProducer(bootstrap_servers='localhost:9092', value_serializer=la
 # Set some constants
 NUM_SENSORS = 10
 TOPIC_NAME = "dedup_weather_topic"
-LOG_INTERVAL = 5  # in seconds
-CACHE_SIZE = 100
+LOG_INTERVAL = 4  # in seconds
+CACHE_SIZE = 100  # Decreased from 100
 
 # Counter for messages produced
 msg_count = 0
@@ -20,10 +20,18 @@ recent_records = []
 
 start_time = time.time()
 
+def modify_data(data):
+    """Function to slightly modify the temperature and humidity."""
+    data['temperature'] += random.uniform(-0.5, 0.5)
+    data['humidity'] += random.uniform(-1, 1)
+    return data
+
 try:
     while True:
-        if random.random() < 0.3 and len(recent_records) > 0:  # 30% probability for duplicate
+        if random.random() < 0.3 and len(recent_records) > 0:  # Reduced probability to 30%
             data = random.choice(recent_records)
+            # if random.random() < 0.2:  # 20% chance to modify the data slightly
+            #     data = modify_data(data)
         else:
             # Create mock sensor data
             data = {
@@ -49,7 +57,7 @@ try:
             start_time = time.time()
 
         # Optional: Sleep for a bit to simulate some delay in producing data
-        time.sleep(0.001)
+        time.sleep(0.2)
 
 except KeyboardInterrupt:
     print("\nSimulation interrupted. Exiting...")
