@@ -49,7 +49,7 @@ try:
             start_time = time.time()
 
         # Optional: Sleep for a bit to simulate some delay in producing data
-        # time.sleep(0.01)
+        time.sleep(0.001)
 
 except KeyboardInterrupt:
     print("\nSimulation interrupted. Exiting...")
